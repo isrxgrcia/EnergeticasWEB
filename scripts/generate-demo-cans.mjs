@@ -38,6 +38,6 @@ const svg = ({ label, color, dark }) => `<svg xmlns="http://www.w3.org/2000/svg"
 </svg>
 `;
 
-mkdirSync('public/img/demo', { recursive: true });
-for (const can of cans) writeFileSync(`public/img/demo/${can.id}.svg`, svg(can));
+mkdirSync('src/assets/demo', { recursive: true });
+for (const can of cans) writeFileSync(`src/assets/demo/${can.id}.svg`, svg(can));
 console.log(`Generadas ${cans.length} latas de demostración.`);

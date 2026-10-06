@@ -75,7 +75,7 @@ Ninguno aplicado. Si el contrato definitivo elige verificación global (D9) o pe
 ## 6. Cómo integrar cuando llegue el contrato
 
 1. Añadir `src/data/catalog.<fuente>.ts` con los datos autorizados (o un adaptador desde el formato acordado hacia `Drink`).
-2. Cambiar `SOURCE` en `src/data/catalog.ts` y retirar `catalog.demo.ts` y `public/img/demo/`.
+2. Cambiar `SOURCE` en `src/data/catalog.ts` y retirar `catalog.demo.ts` y `src/assets/demo/`.
 3. Ajustar `contract.ts` a los nombres acordados; la UI solo depende de él.
 4. Ejecutar `npm run check`. Hay que sustituir las pruebas `catálogo de demostración` por pruebas de integridad del catálogo real: cada cifra verificada tiene fuente, unidad y base.
 

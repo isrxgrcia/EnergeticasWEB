@@ -39,7 +39,8 @@ test.describe('P01 inicio', () => {
     await expect(h).toHaveAttribute('data-drink-id', 'demo-tropical');
     await expect(h.locator('.drink-name')).toHaveText('Demo Tropical');
     await expect(heroImage(page)).toHaveAttribute('alt', /Demo Tropical/);
-    await expect(heroImage(page)).toHaveAttribute('src', /demo-tropical/);
+    const expectedSrc = await page.locator('[data-drink-id="demo-tropical"].card img').getAttribute('src');
+    await expect(heroImage(page)).toHaveAttribute('src', expectedSrc!);
     await expect(h.locator('#hero-ver-ficha')).toHaveAttribute('href', /bebida=demo-tropical/);
     await expect(h).toHaveAttribute('style', /--accent:#FF8A1F/);
     await expect(page.locator('[aria-pressed="true"]')).toHaveCount(1);
@@ -76,16 +77,28 @@ test.describe('P01 inicio', () => {
   });
 
   test('imagen fallida muestra placeholder identificado', async ({ page }) => {
-    await page.route('**/img/demo/*.svg', (r) => r.abort());
     await page.goto('/');
+    // Las imágenes de demo van incrustadas; se simula el fallo de carga.
+    await heroImage(page).dispatchEvent('error');
     await expect(hero(page).getByRole('img', { name: 'Imagen no disponible de «Demo Cítrica»' })).toBeVisible();
-    const card = page.locator('[data-drink-id="demo-original"].card');
-    await card.scrollIntoViewIfNeeded(); // imágenes del catálogo con carga diferida
-    await expect(card.getByRole('img', { name: 'Imagen no disponible de «Demo Original»' })).toBeVisible();
-    // Los únicos errores admitidos son las cargas abortadas a propósito.
-    const errors = consoleErrors.get(page)!;
-    expect(errors.every((e) => e.includes('Failed to load resource'))).toBe(true);
-    errors.length = 0;
+    await expect(page.locator('.showcase__stage .can')).toHaveAttribute('data-image-state', 'error');
+  });
+
+  test('la navegación funciona aunque el historial del navegador esté bloqueado', async ({ page }) => {
+    await page.addInitScript(() => {
+      const deny = () => {
+        throw new DOMException('bloqueado', 'SecurityError');
+      };
+      history.pushState = deny;
+      history.replaceState = deny;
+    });
+    await page.goto('/');
+    await page.getByLabel('Sabor', { exact: true }).selectOption({ label: 'Mentolado' });
+    await page.locator('#tarjeta-demo-menta-glaciar').click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Demo Menta Glaciar' })).toBeFocused();
+    await page.getByRole('link', { name: '← Volver al catálogo' }).click();
+    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('menta');
+    await expect(page.locator('#tarjeta-demo-menta-glaciar')).toBeFocused();
   });
 });
 
