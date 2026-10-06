@@ -1,0 +1,72 @@
+/* Tokens de diseño — docs/especificacion-diseno.md §4 (valores propuestos). */
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f3eee3;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Color — roles funcionales */
+  --color-bg: #121214;
+  --color-surface: #1c1c20;
+  --color-surface-raised: #26262b;
+  --color-text: #f3eee3;
+  --color-text-muted: #b4aea3;
+  --color-border-control: #77777f;
+  --color-border-subtle: #2e2e34;
+  --color-focus: #f3eee3;
+
+  /* Acento por bebida (se sobrescribe en cada componente) */
+  --accent: #f3eee3;
+  --accent-text: var(--color-text);
+  --accent-on: #121214;
+
+  /* Tipografía */
+  --font-display: 'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --fs-display: clamp(2.75rem, 1.5rem + 6vw, 6.5rem);
+  --lh-body: 1.55;
+  --lh-display: 0.95;
+  --measure: 65ch;
+
+  /* Espaciado */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --content-max: 80rem;
+
+  /* Superficies y controles */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-pill: 999px;
+  --target-min: 2.75rem;
+  --focus-ring: 3px solid var(--color-focus);
+  --focus-offset: 3px;
+
+  /* Movimiento */
+  --dur-fast: 180ms;
+  --dur-base: 260ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
