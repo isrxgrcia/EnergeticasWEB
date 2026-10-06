@@ -52,7 +52,7 @@ export interface Drink {
   id: string;
   name: string;
   brand: string;
-  /** Claves del vocabulario provisional de sabores (1–3). */
+  /** Claves del vocabulario provisional de sabores (0–3; vacío = sabor por confirmar). */
   flavors: FlavorKey[];
   description: string;
   /** `null` = imagen pendiente. */
@@ -63,8 +63,8 @@ export interface Drink {
   caffeine: Measure<MassUnit>;
   sugar: Measure<MassUnit>;
   sources: Source[];
-  /** Contenido de demostración: textos e imágenes no reales. */
-  demo: boolean;
+  /** Textos o datos pendientes de confirmar por el responsable del contenido. */
+  provisional: boolean;
 }
 
 /** Vocabulario provisional de perfiles de sabor (pendiente PD-06). */
@@ -73,6 +73,7 @@ export const FLAVORS = {
   'frutos-rojos': 'Frutos rojos',
   tropical: 'Tropical',
   original: 'Original',
+  cereza: 'Cereza',
   menta: 'Mentolado',
   uva: 'Uva',
 } as const;

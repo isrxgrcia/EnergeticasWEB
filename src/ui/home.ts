@@ -8,6 +8,7 @@ import {
 import { FLAVORS, type Drink } from '../data/contract';
 import {
   accentStyle,
+  ambienceClass,
   drinkImage,
   fichaLink,
   flavorTags,
@@ -62,7 +63,7 @@ export function renderHome(
     // Todo se deriva de la misma bebida: no hay estados parciales que mezclar.
     showcase.setAttribute('style', accentStyle(drink));
     showcase.dataset.drinkId = drink.id;
-    ambience.className = `ambience ambience--${drink.flavors[0] ?? 'original'}`;
+    ambience.className = ambienceClass(drink);
 
     const textBlock = h(
       'div',

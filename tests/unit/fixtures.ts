@@ -14,7 +14,7 @@ export function fixtureDrink(overrides: Partial<Drink> = {}): Drink {
     caffeine: { value: 32, unit: 'mg', basis: 'per_100ml', verification: 'verified', sourceId: 's1' },
     sugar: { value: null, unit: null, basis: null, verification: 'pending', sourceId: null },
     sources: [{ id: 's1', label: 'Etiqueta del envase (test)', url: null, accessed: '2026-01-01' }],
-    demo: false,
+    provisional: false,
     ...overrides,
   };
 }
