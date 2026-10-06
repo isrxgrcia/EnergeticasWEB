@@ -24,45 +24,36 @@ test.describe('P01 inicio', () => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Descubre bebidas/);
     await expect(page.locator('#hero-ver-ficha')).toBeInViewport();
-    await expect(page.locator('#hero-ver-ficha')).toHaveAccessibleName('Ver ficha de Demo Cítrica');
+    await expect(page.locator('#hero-ver-ficha')).toHaveAccessibleName('Ver ficha de Citrus Shock');
     await expect(hero(page).getByRole('link', { name: 'Explorar bebidas' })).toBeInViewport();
     await expect(heroImage(page)).toBeInViewport();
-    await expect(page.getByText('Contenido de demostración:')).toBeVisible();
+    await expect(page.getByText('Contenido provisional:')).toBeVisible();
   });
 
   test('F01: selecciones rápidas terminan coherentes en la última', async ({ page }) => {
     await page.goto('/');
-    for (const name of ['Demo Bosque Rojo', 'Demo Tropical', 'Demo Original', 'Demo Menta Glaciar', 'Demo Tropical']) {
+    for (const name of ['Blue Voltage', 'Tropical Detonator', 'Original Blast', 'Zero Ice', 'Tropical Detonator']) {
       await selectorOption(page, name).click({ delay: 0 });
     }
     const h = hero(page);
-    await expect(h).toHaveAttribute('data-drink-id', 'demo-tropical');
-    await expect(h.locator('.drink-name')).toHaveText('Demo Tropical');
-    await expect(heroImage(page)).toHaveAttribute('alt', /Demo Tropical/);
-    const expectedSrc = await page.locator('[data-drink-id="demo-tropical"].card img').getAttribute('src');
+    await expect(h).toHaveAttribute('data-drink-id', 'tropical-detonator');
+    await expect(h.locator('.drink-name')).toHaveText('Tropical Detonator');
+    await expect(heroImage(page)).toHaveAttribute('alt', /Tropical Detonator/);
+    const expectedSrc = await page.locator('[data-drink-id="tropical-detonator"].card img').getAttribute('src');
     await expect(heroImage(page)).toHaveAttribute('src', expectedSrc!);
-    await expect(h.locator('#hero-ver-ficha')).toHaveAttribute('href', /bebida=demo-tropical/);
-    await expect(h).toHaveAttribute('style', /--accent:#FF8A1F/);
+    await expect(h.locator('#hero-ver-ficha')).toHaveAttribute('href', /bebida=tropical-detonator/);
+    await expect(h).toHaveAttribute('style', /--accent:#FF8C1A/);
     await expect(page.locator('[aria-pressed="true"]')).toHaveCount(1);
-    await expect(selectorOption(page, 'Demo Tropical')).toHaveAttribute('aria-pressed', 'true');
-  });
-
-  test('F01 sin imagen: placeholder conserva nombre y geometría', async ({ page }) => {
-    await page.goto('/');
-    await selectorOption(page, 'Demo Uva Nocturna').click();
-    const ph = hero(page).getByRole('img', { name: 'Imagen no disponible de «Demo Uva Nocturna»' });
-    await expect(ph).toBeVisible();
-    const box = await page.locator('.showcase__stage .can').boundingBox();
-    expect(box!.height).toBeGreaterThan(100);
+    await expect(selectorOption(page, 'Tropical Detonator')).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('F04: teclado selecciona sin mover el foco', async ({ page }) => {
     await page.goto('/');
-    const option = selectorOption(page, 'Demo Original');
+    const option = selectorOption(page, 'Original Blast');
     await option.focus();
     await page.keyboard.press('Enter');
     await expect(option).toBeFocused();
-    await expect(hero(page).locator('.drink-name')).toHaveText('Demo Original');
+    await expect(hero(page).locator('.drink-name')).toHaveText('Original Blast');
     await page.keyboard.press('Space');
     await expect(option).toHaveAttribute('aria-pressed', 'true');
   });
@@ -70,17 +61,17 @@ test.describe('P01 inicio', () => {
   test('F04: movimiento reducido aplica cambios inmediatos', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await selectorOption(page, 'Demo Bosque Rojo').click();
+    await selectorOption(page, 'Cherry Nitro').click();
     const running = await page.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
     expect(running).toBe(0);
-    await expect(hero(page).locator('.drink-name')).toHaveText('Demo Bosque Rojo');
+    await expect(hero(page).locator('.drink-name')).toHaveText('Cherry Nitro');
   });
 
   test('imagen fallida muestra placeholder identificado', async ({ page }) => {
     await page.goto('/');
-    // Las imágenes de demo van incrustadas; se simula el fallo de carga.
+    // Las imágenes van incrustadas; se simula el fallo de carga.
     await heroImage(page).dispatchEvent('error');
-    await expect(hero(page).getByRole('img', { name: 'Imagen no disponible de «Demo Cítrica»' })).toBeVisible();
+    await expect(hero(page).getByRole('img', { name: 'Imagen no disponible de «Citrus Shock»' })).toBeVisible();
     await expect(page.locator('.showcase__stage .can')).toHaveAttribute('data-image-state', 'error');
   });
 
@@ -93,12 +84,12 @@ test.describe('P01 inicio', () => {
       history.replaceState = deny;
     });
     await page.goto('/');
-    await page.getByLabel('Sabor', { exact: true }).selectOption({ label: 'Mentolado' });
-    await page.locator('#tarjeta-demo-menta-glaciar').click();
-    await expect(page.getByRole('heading', { level: 1, name: 'Demo Menta Glaciar' })).toBeFocused();
+    await page.getByLabel('Sabor', { exact: true }).selectOption({ label: 'Cereza' });
+    await page.locator('#tarjeta-cherry-nitro').click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Cherry Nitro' })).toBeFocused();
     await page.getByRole('link', { name: '← Volver al catálogo' }).click();
-    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('menta');
-    await expect(page.locator('#tarjeta-demo-menta-glaciar')).toBeFocused();
+    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('cereza');
+    await expect(page.locator('#tarjeta-cherry-nitro')).toBeFocused();
   });
 });
 
@@ -111,47 +102,46 @@ test.describe('P02 explorador', () => {
 
   test('F02: filtros combinados, ficha y vuelta conservando filtros, posición y foco', async ({ page }) => {
     await page.goto('/');
-    await page.getByLabel('Marca', { exact: true }).selectOption({ label: 'Marca Demo A' });
-    await page.getByLabel('Sabor', { exact: true }).selectOption({ label: 'Cítrico' });
-    await expect(page).toHaveURL(/marca=marca-demo-a&sabor=citrico/);
-    await expect(page.getByRole('status')).toHaveText('2 bebidas · Marca Demo A · Cítrico');
-    await expect(page.locator('.catalog > li')).toHaveCount(2);
+    await page.getByLabel('Marca', { exact: true }).selectOption({ label: 'Jeta TNT' });
+    await page.getByLabel('Sabor', { exact: true }).selectOption({ label: 'Tropical' });
+    await expect(page).toHaveURL(/marca=jeta-tnt&sabor=tropical/);
+    await expect(page.getByRole('status')).toHaveText('1 bebida · Jeta TNT · Tropical');
+    await expect(page.locator('.catalog > li')).toHaveCount(1);
 
-    const link = page.getByRole('link', { name: 'Ver ficha de Demo Tropical' }).last();
+    const link = page.getByRole('link', { name: 'Ver ficha de Tropical Detonator' }).last();
     await link.scrollIntoViewIfNeeded();
     const topBefore = await link.evaluate((el) => el.getBoundingClientRect().top);
     await link.click();
 
-    await expect(page).toHaveURL(/bebida=demo-tropical/);
-    await expect(page.getByRole('heading', { level: 1, name: 'Demo Tropical' })).toBeFocused();
-    await expect(page).toHaveTitle('Demo Tropical — Energy Showcase');
+    await expect(page).toHaveURL(/bebida=tropical-detonator/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Tropical Detonator' })).toBeFocused();
+    await expect(page).toHaveTitle('Tropical Detonator — Energy Showcase');
     await page.getByRole('link', { name: '← Volver al catálogo' }).click();
 
-    await expect(page).toHaveURL(/\?marca=marca-demo-a&sabor=citrico$/);
-    await expect(page.getByLabel('Marca', { exact: true })).toHaveValue('marca-demo-a');
-    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('citrico');
-    await expect(page.locator('.catalog > li')).toHaveCount(2);
-    await expect(page.locator('#tarjeta-demo-tropical')).toBeFocused();
-    const topAfter = await page.locator('#tarjeta-demo-tropical').evaluate((el) => el.getBoundingClientRect().top);
+    await expect(page).toHaveURL(/\?marca=jeta-tnt&sabor=tropical$/);
+    await expect(page.getByLabel('Marca', { exact: true })).toHaveValue('jeta-tnt');
+    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('tropical');
+    await expect(page.locator('.catalog > li')).toHaveCount(1);
+    await expect(page.locator('#tarjeta-tropical-detonator')).toBeFocused();
+    const topAfter = await page.locator('#tarjeta-tropical-detonator').evaluate((el) => el.getBoundingClientRect().top);
     expect(Math.abs(topAfter - topBefore)).toBeLessThan(2);
   });
 
   test('F02: botón Atrás del navegador también conserva filtros', async ({ page }) => {
-    await page.goto('/?sabor=menta');
-    await page.locator('#tarjeta-demo-menta-glaciar').click();
-    await expect(page.getByRole('heading', { level: 1, name: 'Demo Menta Glaciar' })).toBeVisible();
+    await page.goto('/?sabor=cereza');
+    await page.locator('#tarjeta-cherry-nitro').click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Cherry Nitro' })).toBeVisible();
     await page.goBack();
-    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('menta');
+    await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('cereza');
     await expect(page.locator('.catalog > li')).toHaveCount(1);
     await page.goForward();
-    await expect(page.getByRole('heading', { level: 1, name: 'Demo Menta Glaciar' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Cherry Nitro' })).toBeVisible();
   });
 
-  test('F02: cero resultados ofrece restablecer', async ({ page }) => {
-    await page.goto('/?marca=marca-demo-c&sabor=citrico');
-    await expect(page.getByRole('status')).toHaveText(/^0 bebidas/);
-    await expect(page.locator('[data-state="no-results"]')).toContainText('Ninguna bebida coincide');
-    await page.locator('[data-state="no-results"]').getByRole('button', { name: 'Restablecer filtros' }).click();
+  test('F02: restablecer filtros vuelve al catálogo completo', async ({ page }) => {
+    await page.goto('/?sabor=original');
+    await expect(page.locator('.catalog > li')).toHaveCount(1);
+    await page.getByRole('button', { name: 'Restablecer filtros' }).click();
     await expect(page.locator('.catalog > li')).toHaveCount(6);
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByLabel('Marca', { exact: true })).toBeFocused();
@@ -164,18 +154,24 @@ test.describe('P02 explorador', () => {
 });
 
 test.describe('P03 detalle', () => {
-  test('F03: sin cifras inventadas; pendiente/no verificada visibles', async ({ page }) => {
-    await page.goto('/?bebida=demo-bosque-rojo');
+  test('F03: sin cifras publicadas; pendiente visible y contenido provisional marcado', async ({ page }) => {
+    await page.goto('/?bebida=cherry-nitro');
     const features = page.locator('.features');
-    await expect(features.locator('[data-feature="volume"] dd')).toHaveText('Información no verificada');
-    await expect(features.locator('[data-feature="sugar"] dd')).toHaveText('Información pendiente');
+    for (const key of ['volume', 'caffeine', 'sugar']) {
+      await expect(features.locator(`[data-feature="${key}"] dd`)).toHaveText('Información pendiente');
+    }
     await expect(features).not.toContainText(/\d/);
-    await expect(page.getByText('Contenido de demostración', { exact: true })).toBeVisible();
+    await expect(page.getByText('Contenido provisional', { exact: true })).toBeVisible();
     await expect(page.getByText('No hay fuentes registradas')).toBeVisible();
   });
 
+  test('sabor por confirmar se indica en la ficha', async ({ page }) => {
+    await page.goto('/?bebida=zero-ice');
+    await expect(page.getByRole('list', { name: 'Perfil de sabor' })).toHaveText('Sabor por confirmar');
+  });
+
   test('URL directa y vuelta al catálogo', async ({ page }) => {
-    await page.goto('/?bebida=demo-original&sabor=original');
+    await page.goto('/?bebida=original-blast&sabor=original');
     await page.getByRole('link', { name: '← Ver el catálogo' }).click();
     await expect(page.getByLabel('Sabor', { exact: true })).toHaveValue('original');
     await expect(page.getByRole('heading', { name: 'Explorar bebidas' })).toBeFocused();
@@ -183,10 +179,10 @@ test.describe('P03 detalle', () => {
 
   test('“Ver ficha” desde el inicio vuelve al inicio con la misma selección', async ({ page }) => {
     await page.goto('/');
-    await selectorOption(page, 'Demo Original').click();
+    await selectorOption(page, 'Original Blast').click();
     await page.locator('#hero-ver-ficha').click();
     await page.getByRole('link', { name: '← Volver al inicio' }).click();
-    await expect(hero(page).locator('.drink-name')).toHaveText('Demo Original');
+    await expect(hero(page).locator('.drink-name')).toHaveText('Original Blast');
     await expect(page.locator('#hero-ver-ficha')).toBeFocused();
   });
 
@@ -213,7 +209,7 @@ test.describe('adaptable (F04)', () => {
   for (const [label, width, height] of sizes) {
     test(`sin desbordamiento horizontal: ${label} (${width}×${height})`, async ({ page }) => {
       await page.setViewportSize({ width, height });
-      for (const url of ['/', '/?bebida=demo-menta-glaciar', '/?bebida=no-existe', '/?marca=marca-demo-c&sabor=citrico']) {
+      for (const url of ['/', '/?bebida=tropical-detonator', '/?bebida=no-existe', '/?marca=jeta-tnt&sabor=cereza']) {
         await page.goto(url);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         expect(overflow, url).toBeLessThanOrEqual(0);
@@ -239,7 +235,7 @@ test.describe('adaptable (F04)', () => {
 });
 
 test.describe('accesibilidad automatizada (axe, WCAG 2.2 A/AA)', () => {
-  for (const url of ['/', '/?bebida=demo-tropical', '/?bebida=no-existe', '/?marca=marca-demo-c&sabor=citrico', '/?sabor=uva']) {
+  for (const url of ['/', '/?bebida=tropical-detonator', '/?bebida=zero-ice', '/?bebida=no-existe', '/?sabor=cereza']) {
     test(`sin infracciones detectables: ${url}`, async ({ page }) => {
       await page.goto(url);
       const results = await new AxeBuilder({ page })

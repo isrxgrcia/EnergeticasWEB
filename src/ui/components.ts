@@ -7,18 +7,23 @@ export function accentStyle(drink: Drink): string {
   return `--accent:${t.accent};--accent-text:${t.accentText};--accent-on:${t.accentOn}`;
 }
 
-export function demoBadge(short = false): HTMLElement {
-  return h('span', { class: 'badge badge--demo' }, short ? 'Demostración' : 'Contenido de demostración');
+export function provisionalBadge(short = false): HTMLElement {
+  return h('span', { class: 'badge badge--demo' }, short ? 'Provisional' : 'Contenido provisional');
 }
 
-export function flavorTags(drink: Drink, withDemoBadge = false): HTMLElement {
-  const tags = h(
-    'ul',
-    { class: 'tags', 'aria-label': 'Perfil de sabor' },
-    ...drink.flavors.map((f) => h('li', { class: 'tag' }, FLAVORS[f])),
-  );
-  if (!withDemoBadge || !drink.demo) return tags;
-  return h('div', { class: 'tags-row' }, tags, demoBadge(true));
+/** Clase del motivo de ambiente: primer sabor o neutro si está por confirmar. */
+export function ambienceClass(drink: Drink): string {
+  return `ambience ambience--${drink.flavors[0] ?? 'neutro'}`;
+}
+
+export function flavorTags(drink: Drink, withBadge = false): HTMLElement {
+  const items =
+    drink.flavors.length > 0
+      ? drink.flavors.map((f) => h('li', { class: 'tag' }, FLAVORS[f]))
+      : [h('li', { class: 'tag tag--pending' }, 'Sabor por confirmar')];
+  const tags = h('ul', { class: 'tags', 'aria-label': 'Perfil de sabor' }, ...items);
+  if (!withBadge || !drink.provisional) return tags;
+  return h('div', { class: 'tags-row' }, tags, provisionalBadge(true));
 }
 
 /** Silueta identificada: no debe parecer una imagen definitiva. */
@@ -64,6 +69,7 @@ export type ImageVariant = 'hero' | 'card' | 'thumb' | 'detail';
  */
 export function drinkImage(drink: Drink, variant: ImageVariant): HTMLElement {
   const frame = h('div', { class: `can can--${variant}` });
+  if (drink.image) frame.style.aspectRatio = `${drink.image.width} / ${drink.image.height}`;
   const placeholderSize = variant === 'thumb' ? 'none' : variant === 'card' ? 'short' : 'full';
   if (!drink.image) {
     frame.append(imagePlaceholder(drink, placeholderSize));

@@ -1,6 +1,6 @@
 import type { Drink } from '../data/contract';
 import { describeFeature, FEATURE_LABELS, type FeatureKey } from '../domain/features';
-import { accentStyle, demoBadge, drinkImage, flavorTags, stateMessage } from './components';
+import { accentStyle, ambienceClass, drinkImage, flavorTags, provisionalBadge, stateMessage } from './components';
 import { h } from './dom';
 
 export interface DetailCallbacks {
@@ -88,7 +88,7 @@ export function renderDetail(drink: Drink | null, cb: DetailCallbacks): HTMLElem
       h(
         'div',
         { class: 'detail__media' },
-        h('div', { class: `ambience ambience--${drink.flavors[0] ?? 'original'}`, 'aria-hidden': 'true' }),
+        h('div', { class: ambienceClass(drink), 'aria-hidden': 'true' }),
         drinkImage(drink, 'detail'),
       ),
       h(
@@ -97,7 +97,7 @@ export function renderDetail(drink: Drink | null, cb: DetailCallbacks): HTMLElem
         h('p', { class: 'brand' }, drink.brand),
         h('h1', { id: 'detalle-titulo', tabindex: -1, class: 'detail__title drink-name' }, drink.name),
         flavorTags(drink),
-        drink.demo ? demoBadge() : null,
+        drink.provisional ? provisionalBadge() : null,
         h('h2', { class: 'section-title' }, 'Sabor'),
         h('p', { class: 'detail__desc' }, drink.description),
         h('h2', { class: 'section-title' }, 'Características'),

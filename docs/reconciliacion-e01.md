@@ -27,7 +27,7 @@ Columnas: concepto del brief → nombre y tipo provisional (`src/data/contract.t
 | azúcar | `sugar: Measure<'mg'\|'g'>` | «N g por 100 ml / por envase» | — | D7 |
 | fuente | `sources: Source[]` + `Measure.sourceId` | Fuente por cifra y lista «Fuentes» | — | D8: procedencia por campo o por bebida |
 | estado de verificación | `Measure.verification` por campo | Cifra solo si está `verified` | — | D9: por campo (propuesto) o global |
-| (no está en E01) | `demo: boolean` | Insignia «Contenido de demostración» | — | D10: añadir o derivar el estado «contenido provisional» |
+| (no está en E01) | `provisional: boolean` | Insignia «Contenido provisional» y aviso en la cabecera | — | D10: añadir o derivar el estado «contenido provisional» |
 
 `Measure` = `{ value: number | null; unit; basis: 'per_container' | 'per_100ml' | null; verification: 'verified' | 'unverified' | 'pending'; sourceId }`.
 
@@ -77,9 +77,17 @@ Ninguno aplicado. Si el contrato definitivo elige verificación global (D9) o pe
 1. Añadir `src/data/catalog.<fuente>.ts` con los datos autorizados (o un adaptador desde el formato acordado hacia `Drink`).
 2. Cambiar `SOURCE` en `src/data/catalog.ts` y retirar `catalog.demo.ts` y `src/assets/demo/`.
 3. Ajustar `contract.ts` a los nombres acordados; la UI solo depende de él.
-4. Ejecutar `npm run check`. Hay que sustituir las pruebas `catálogo de demostración` por pruebas de integridad del catálogo real: cada cifra verificada tiene fuente, unidad y base.
+4. Ejecutar `npm run check`. Hay que mantener las pruebas de integridad del catálogo (`catálogo Jeta TNT`) y ampliarlas: cada cifra verificada tiene fuente, unidad y base.
 
 ## 7. Comprobado sin depender del contrato
 
 - F01–F04 con datos incompletos, bebida sin imagen, imagen que falla, id inexistente y filtros sin coincidencias (`tests/e2e`).
 - Catálogo vacío: solo a nivel de datos (`tests/unit/catalog.test.ts`). La vista de catálogo vacío está implementada pero **no tiene prueba end-to-end** (ver la revisión).
+
+## 8. Actualización 2026-10-06: catálogo Jeta TNT
+
+- El catálogo de demostración se ha sustituido por 6 bebidas de **Jeta TNT** (`src/data/catalog.jeta-tnt.ts`), con imágenes aportadas por el usuario y recortadas con una silueta común.
+- Los perfiles de sabor se han deducido **solo del nombre** de la variante: Citrus Shock → cítrico, Original Blast → original, Cherry Nitro → cereza (clave nueva en el vocabulario) y Tropical Detonator → tropical. Blue Voltage y Zero Ice quedan como «Sabor por confirmar», así que el contrato admite de 0 a 3 sabores.
+- Las latas muestran «500 ML» y los textos «Caffeine», «B vitamins» y «Taurine». **No se han publicado como datos**: no hay ninguna fuente verificada registrada y una etiqueta de diseño no basta como verificación (D7, D8, D9).
+- Con una sola marca y opciones de filtro derivadas del catálogo, el estado «sin resultados» no se puede alcanzar desde la interfaz. Sigue implementado y tiene prueba unitaria.
+

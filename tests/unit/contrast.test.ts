@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { accentTokens, contrastRatio, THEME } from '../../src/domain/contrast';
-import { DEMO_CATALOG } from '../../src/data/catalog.demo';
+import { JETA_TNT_CATALOG as CATALOG } from '../../src/data/catalog.jeta-tnt';
 
 describe('contraste (§4.1)', () => {
   it('coincide con los valores de la especificación', () => {
@@ -14,7 +14,7 @@ describe('contraste (§4.1)', () => {
   });
 
   it('todo acento de texto del catálogo cumple 4.5:1 en fondo y superficie', () => {
-    for (const d of DEMO_CATALOG) {
+    for (const d of CATALOG) {
       const { accentText } = accentTokens(d.color);
       expect(contrastRatio(accentText, THEME.bg)).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(accentText, THEME.surface)).toBeGreaterThanOrEqual(4.5);

@@ -79,3 +79,11 @@ Comprobado (automático o manual):
 ## 6. Alcance respetado
 
 Sin carrito, pagos, cuentas, administración, servidor, API remota, almacenamiento de datos personales, cookies ni recomendaciones de consumo. Sin logotipos ni marcas reales. Aviso de independencia en la cabecera y en el pie.
+
+## 7. Revisión 2026-10-06: catálogo Jeta TNT
+
+- Imágenes reales: recorte con una silueta común (la misma plantilla en las 6 latas), WebP con transparencia, 468×1154, entre 132 y 160 kB cada una. Revisadas sobre fondo de contraste: sin restos del fondo original.
+- Defecto corregido: `filter: drop-shadow` sobre las imágenes grandes dibujaba bandas rectangulares en Chromium. Se ha sustituido por una sombra elíptica bajo la lata.
+- Defecto corregido: en las tarjetas con etiquetas en dos líneas, el título quedaba desalineado (`grid-template-rows: auto 1fr`).
+- Pruebas: 33 unitarias y 64 end-to-end en verde. Las pruebas de «sin resultados» de la interfaz se han retirado porque ese estado ya no se puede alcanzar con una sola marca (ver la reconciliación, §8).
+

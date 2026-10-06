@@ -454,8 +454,8 @@ Contenido de demostración (para la etapa 2): bebidas **ficticias** (“Demo Cí
 
 | ID | Pendiente | Responsable | Placeholder mientras tanto |
 |---|---|---|---|
-| PD-01 | Selección de marcas y bebidas | Usuario / responsable de contenido | Bebidas ficticias “Contenido de demostración” |
-| PD-02 | Imágenes de latas (recortadas, fondo transparente, ≥ 1200 px de alto para hero, versión miniatura) y **autorización de uso** documentada por imagen | Usuario / responsable de contenido | Silueta de lata en trazo (§3.9) |
+| PD-01 | Selección de marcas y bebidas | Usuario / responsable de contenido | **Parcial (2026-10-06):** 6 bebidas de Jeta TNT. Descripciones y sabores de Blue Voltage y Zero Ice, provisionales |
+| PD-02 | Imágenes de latas (recortadas, fondo transparente, ≥ 1200 px de alto para hero, versión miniatura) y **autorización de uso** documentada por imagen | Usuario / responsable de contenido | **Parcial:** imágenes aportadas por el usuario y recortadas (`scripts/cutout-cans.py`). Falta documentar la autorización |
 | PD-03 | Fuentes y valores verificados de volumen, cafeína y azúcar | Responsable de contenido | “Información pendiente” |
 | PD-04 | Stack técnico (no existe en el repositorio) | Etapa 2, con propuesta mínima explícita | — |
 | PD-05 | Forma técnica del contrato E01 y operaciones | Arquitecto Backend de Prompts | Capa de datos provisional aislada |

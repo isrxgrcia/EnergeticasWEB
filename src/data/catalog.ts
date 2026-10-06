@@ -6,10 +6,10 @@
  * Para integrar el catálogo definitivo basta con sustituir `SOURCE` por los
  * datos autorizados adaptados a `Drink` (ver docs/reconciliacion-e01.md).
  */
-import { DEMO_CATALOG } from './catalog.demo';
+import { JETA_TNT_CATALOG } from './catalog.jeta-tnt';
 import { FLAVORS, type Drink, type FlavorKey } from './contract';
 
-let SOURCE: readonly Drink[] = DEMO_CATALOG;
+let SOURCE: readonly Drink[] = JETA_TNT_CATALOG;
 
 /** Solo para pruebas: sustituye el catálogo (p. ej. catálogo vacío). */
 export function __setCatalogForTests(drinks: readonly Drink[]): void {
