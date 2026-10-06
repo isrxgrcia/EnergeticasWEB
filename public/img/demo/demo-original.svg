@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 880" width="400" height="880">
+  <defs>
+    <linearGradient id="body" x1="0" x2="1">
+      <stop offset="0" stop-color="#0B2A73"/>
+      <stop offset=".28" stop-color="#3D7BFF"/>
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".55"/>
+      <stop offset=".56" stop-color="#3D7BFF"/>
+      <stop offset="1" stop-color="#0B2A73"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" x2="1">
+      <stop offset="0" stop-color="#6b6b72"/>
+      <stop offset=".45" stop-color="#e9e9ee"/>
+      <stop offset="1" stop-color="#5a5a61"/>
+    </linearGradient>
+  </defs>
+  <path d="M70 70 Q70 40 110 34 L290 34 Q330 40 330 70 L338 110 L338 790 L330 830 Q330 852 290 856 L110 856 Q70 852 70 830 L62 790 L62 110 Z" fill="url(#body)"/>
+  <path d="M70 70 Q70 40 110 34 L290 34 Q330 40 330 70 L338 110 L62 110 Z" fill="url(#metal)"/>
+  <path d="M62 790 L338 790 L330 830 Q330 852 290 856 L110 856 Q70 852 70 830 Z" fill="url(#metal)"/>
+  <ellipse cx="200" cy="40" rx="100" ry="9" fill="#2a2a2f" opacity=".5"/>
+  <g fill="#121214">
+    <text x="200" y="250" text-anchor="middle" font-family="Impact, 'Arial Narrow', sans-serif" font-size="92" textLength="240" lengthAdjust="spacingAndGlyphs">DEMO</text>
+    <text x="200" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="30">ORIGINAL</text>
+  </g>
+  <rect x="110" y="600" width="180" height="56" rx="8" fill="#121214" opacity=".85"/>
+  <text x="200" y="636" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="#F3EEE3" letter-spacing="2">PLACEHOLDER</text>
+</svg>
