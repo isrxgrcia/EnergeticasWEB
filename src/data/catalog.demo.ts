@@ -17,9 +17,18 @@ function unverified<U extends string>(): Measure<U> {
   return { value: null, unit: null, basis: null, verification: 'unverified', sourceId: null };
 }
 
+// Las latas de demostración se empaquetan con la app (pequeñas: se incrustan).
+const DEMO_IMAGES = import.meta.glob<string>('../assets/demo/*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
 function demoImage(id: string, name: string) {
+  const src = DEMO_IMAGES[`../assets/demo/${id}.svg`];
+  if (src === undefined) throw new Error(`Falta la imagen de demostración ${id}.svg`);
   return {
-    src: `img/demo/${id}.svg`,
+    src,
     alt: `Lata ilustrada de demostración de «${name}»`,
     width: 400,
     height: 880,

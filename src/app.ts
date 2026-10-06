@@ -4,6 +4,7 @@ import { buildSearch, parseRoute, type Route } from './domain/navigation';
 import { renderDetail } from './ui/detail';
 import { prefersReducedMotion } from './ui/dom';
 import { renderHome, type HomeView } from './ui/home';
+import { AppHistory } from './history';
 
 const SITE = 'Energy Showcase';
 
@@ -17,13 +18,13 @@ interface EntryState {
 }
 
 export function startApp(main: HTMLElement): void {
-  history.scrollRestoration = 'manual';
   let selectedId: string | null = listDrinks()[0]?.id ?? null;
   let home: HomeView | null = null;
 
-  const state = (): EntryState => (history.state as EntryState | null) ?? {};
+  const nav = new AppHistory<EntryState>(() => render(true));
+  const state = (): EntryState => nav.state;
   const currentRoute = (): Route => {
-    const r = parseRoute(location.search);
+    const r = parseRoute(nav.search);
     return { ...r, filter: sanitizeFilter(r.filter) };
   };
 
@@ -57,14 +58,14 @@ export function startApp(main: HTMLElement): void {
     const drink = selectedDrink();
     selectedId = drink?.id ?? null;
     home = renderHome(drink, route.filter, {
-      search: () => location.search,
+      search: () => nav.search,
       onSelect: (d) => {
         selectedId = d.id;
         home?.select(d, true);
       },
       onFilter: (filter) => {
         const search = buildSearch({ view: 'home', drinkId: null, filter });
-        history.replaceState(state(), '', search || location.pathname);
+        nav.replace(state(), search);
         home?.applyFilter(filter);
         home?.refreshLinks();
       },
@@ -93,15 +94,15 @@ export function startApp(main: HTMLElement): void {
 
   function openDetail(link: HTMLAnchorElement): void {
     // Guarda posición y foco de origen en la entrada actual antes de avanzar.
-    history.replaceState({ ...state(), scrollY: window.scrollY, focusId: link.id || undefined }, '');
+    nav.replace({ ...state(), scrollY: window.scrollY, focusId: link.id || undefined });
     const origin: EntryState['origin'] = link.id === 'hero-ver-ficha' ? 'hero' : 'catalog';
-    history.pushState({ app: true, origin } satisfies EntryState, '', link.getAttribute('href')!);
+    nav.push({ app: true, origin }, link.getAttribute('href')!);
     render(false);
   }
 
   function goBack(filter: CatalogFilter): void {
     if (state().app) {
-      history.back(); // popstate restaura filtros, posición y foco
+      nav.back(); // restaura filtros, posición y foco
       return;
     }
     navigateHome(filter, 'explorer');
@@ -109,7 +110,7 @@ export function startApp(main: HTMLElement): void {
 
   function navigateHome(filter: CatalogFilter, focus: 'explorer' | 'top'): void {
     const search = buildSearch({ view: 'home', drinkId: null, filter });
-    history.pushState({ app: true } satisfies EntryState, '', search || location.pathname);
+    nav.push({ app: true }, search);
     render(false);
     if (focus === 'explorer') {
       document.getElementById('explorar')?.scrollIntoView({ block: 'start' });
