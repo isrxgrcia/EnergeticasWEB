@@ -512,6 +512,6 @@ Cambios relevantes respecto al brief: ninguno de alcance. Se **concretan** (sin 
 
 ## 13. Entrada para la etapa 2 (Frontend)
 
-- No hay stack: la etapa 2 debe proponer una elección mínima explícita antes de implementar (p. ej. HTML + CSS + JavaScript sin framework, o con Vite si se necesita empaquetado). Decisión pendiente PD-04.
+- No hay stack: la etapa 2 debe proponer una elección mínima explícita antes de implementar. **Resuelto de forma provisional:** Vite + TypeScript sin framework (ver `decisiones-stack.md`).
 - Implementar con datos ficticios aislados en una capa de acceso sustituible marcada como **contrato provisional**.
 - Validar en prototipo: posición del selector en móvil (PR-07), columnas reales del catálogo en 320–360 px y contraste de los acentos de demostración con la regla §4.1.
